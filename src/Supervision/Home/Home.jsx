@@ -11,6 +11,7 @@ import {Selectors} from './Selectors';
 import {Widget} from './Widget';
 import {Form} from './Form';
 import {Logout} from './Logout';
+import {Maps} from './Maps';
 
 const styles = () => ({
     container: {
@@ -18,6 +19,7 @@ const styles = () => ({
         flexDirection: 'column',
         justifyContent: 'space-between',
         height: '100vh',
+        width: '100%',
         maxWidth: '100%',
         backgroundImage: `url(${Background})`,
         padding: '24px'
@@ -41,22 +43,24 @@ const styles = () => ({
 
 export const HomeCmp = ({classes}) => (
     <Container className={classes.container} component="main" maxWidth="xs">
-        <section className={classes.topContainer}>
+        <Maps/>
+
+        <div className={classes.topContainer}>
             <Widget/>
 
             <div>
                 <Selectors/>
                 <Logout/>
             </div>
-        </section>
+        </div>
 
-        <section className={classes.bottomContainer}>
+        <div className={classes.bottomContainer}>
             <IconButton classes={{root: classes.iconButton}} color="primary">
                 <Menu/>
             </IconButton>
 
             <Form/>
-        </section>
+        </div>
     </Container>
 );
 

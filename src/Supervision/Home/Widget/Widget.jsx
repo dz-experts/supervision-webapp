@@ -11,7 +11,8 @@ const styles = () => ({
         background: '#fff',
         boxShadow: '0 3px 20px 0px #aaa',
         borderRadius: '4px',
-        padding: '16px'
+        padding: '16px',
+        zIndex: 1
     }
 });
 
