@@ -8,7 +8,10 @@ import {
     Button,
     Typography
 } from '@material-ui/core';
+import {Formik, Form, Field, ErrorMessage} from 'formik';
 import Background from '../../asserts/images/bg-01.jpg';
+import {useSupervisionContext} from '../Supervision.context';
+import api from '../../Api';
 
 const styles = theme => ({
     container: {
@@ -27,10 +30,6 @@ const styles = theme => ({
         borderRadius: '4px',
         padding: '16px'
     },
-    form: {
-        width: '100%',
-        marginTop: theme.spacing(1)
-    },
     submit: {
         margin: theme.spacing(3, 0, 2)
     }
@@ -38,6 +37,21 @@ const styles = theme => ({
 
 const LoginCmp = ({classes}) => {
     const history = useHistory();
+    const {setToken} = useSupervisionContext();
+
+    const handleLogin = async ({username, password}) => {
+        console.log(username, password);
+
+        const response = await api.post('api/auth/login/', {
+            username: 'admin@mofeed.dz',
+            password: 'axdvfcsz'
+        });
+
+        if (response.status === 200) {
+            setToken(response.data.token);
+            history.push('/home');
+        }
+    };
 
     return (
         <Container className={classes.container} component="main" maxWidth="xs">
@@ -45,40 +59,56 @@ const LoginCmp = ({classes}) => {
                 <Typography component="h1" variant="h5">
                     Fight COVID-19
                 </Typography>
-                <form className={classes.form} noValidate>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        onClick={() => history.push('/home')}
-                        className={classes.submit}
-                    >
-                        Login
-                    </Button>
-                </form>
+
+                <Formik
+                    initialValues={{username: '', password: ''}}
+                    onSubmit={values => {
+                        handleLogin(values);
+                    }}
+                >
+                    {() => (
+                        <Form>
+                            <Field type="text" name="username">
+                                {({field}) => (
+                                    <TextField
+                                        variant="outlined"
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        label="Username"
+                                        autoFocus
+                                        {...field}
+                                    />
+                                )}
+                            </Field>
+                            <ErrorMessage name="username" component="div"/>
+                            <Field type="password" name="password">
+                                {({field}) => (
+                                    <TextField
+                                        variant="outlined"
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        label="Password"
+                                        id="password"
+                                        autoComplete="current-password"
+                                        {...field}
+                                    />
+                                )}
+                            </Field>
+                            <ErrorMessage name="password" component="div"/>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                Login
+                            </Button>
+                        </Form>
+                    )}
+                </Formik>
             </div>
         </Container>
     );

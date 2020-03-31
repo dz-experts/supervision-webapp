@@ -1,24 +1,41 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     BrowserRouter as Router,
     Switch,
-    Route
+    Route,
+    Redirect
 } from 'react-router-dom';
 import {Home} from './Home';
 import {Login} from './Login';
+import {SupervisionContext} from './Supervision.context';
 
 export const Supervision = () => {
-    return (
-        <Router>
-            <Switch>
-                <Route path="/home">
-                    <Home/>
-                </Route>
+    const [token, setToken] = useState(localStorage.getItem('token'));
 
-                <Route path="/">
-                    <Login/>
-                </Route>
-            </Switch>
-        </Router>
+    const contextValue = {
+        token: token,
+        setToken: data => {
+            localStorage.setItem('token', data);
+            setToken(data);
+        }
+    };
+
+    return (
+        <SupervisionContext.Provider value={contextValue}>
+            <Router>
+                <Switch>
+                    <Route path="/home">
+                        {token ?
+                            <Home/> :
+                            <Redirect to={{pathname: '/'}}/>
+                        }
+                    </Route>
+
+                    <Route path="/">
+                        <Login/>
+                    </Route>
+                </Switch>
+            </Router>
+        </SupervisionContext.Provider>
     );
 };

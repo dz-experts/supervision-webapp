@@ -6,6 +6,7 @@ import {
     withStyles
 } from '@material-ui/core';
 import {PowerSettingsNew} from '@material-ui/icons';
+import {useSupervisionContext} from '../../Supervision.context';
 
 const styles = () => ({
     iconButton: {
@@ -18,9 +19,15 @@ const styles = () => ({
 
 const LogoutCmp = ({classes}) => {
     const history = useHistory();
+    const {setToken} = useSupervisionContext();
+
+    const handleLogout = () => {
+        setToken('');
+        history.push('/');
+    };
 
     return (
-        <IconButton classes={{root: classes.iconButton}} color="secondary" onClick={() => history.push('/')}>
+        <IconButton classes={{root: classes.iconButton}} color="secondary" onClick={() => handleLogout()}>
             <PowerSettingsNew/>
         </IconButton>
     );
