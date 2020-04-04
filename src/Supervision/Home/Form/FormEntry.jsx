@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {
     IconButton,
@@ -14,6 +14,13 @@ import {
 import {Add} from '@material-ui/icons';
 import {Formik, Form} from 'formik';
 import {RenderField} from './RenderField';
+import {
+    getTypeField,
+    getLeftFields,
+    getRightFields,
+    commentsField
+} from '../Home.configs';
+import {saveData} from './FormEntry.request';
 
 const styles = () => ({
     iconButton: {
@@ -45,107 +52,33 @@ const styles = () => ({
     }
 });
 
-const typeOptions = [
-    {
-        id: '1',
-        value: 'Information',
-        displayValue: 'Information'
-    },
-    {
-        id: '2',
-        value: 'Need',
-        displayValue: 'Need'
-    },
-    {
-        id: '3',
-        value: 'Extra',
-        displayValue: 'Extra'
-    },
-    {
-        id: '4',
-        value: 'Work on progress',
-        displayValue: 'Work on progress'
-    }
-];
-
-const selectTypeField = {
-    component: 'selector',
-    name: 'type',
-    label: 'Type',
-    type: 'text',
-    options: typeOptions,
-    disabled: false
-};
-const leftFields = [
-    {
-        component: 'selector',
-        name: 'wilaya',
-        label: 'Wilaya',
-        type: 'text',
-        options: typeOptions,
-        disabled: false
-    },
-    {
-        component: 'selector',
-        name: 'resource',
-        label: 'Resource',
-        type: 'text',
-        options: typeOptions,
-        disabled: false
-    },
-    {
-        component: 'input',
-        name: 'fullName',
-        label: 'Nom',
-        type: 'text',
-        options: typeOptions,
-        disabled: false
-    }
-];
-const rightFields = [
-    {
-        component: 'selector',
-        name: 'commune',
-        label: 'Commune',
-        type: 'text',
-        options: typeOptions,
-        disabled: false
-    },
-    {
-        component: 'input',
-        name: 'quantity',
-        label: 'Quantity',
-        type: 'number',
-        options: typeOptions,
-        disabled: false
-    },
-    {
-        component: 'input',
-        name: 'phone',
-        label: 'Phone',
-        type: 'text',
-        options: typeOptions,
-        disabled: false
-    }
-];
-const commentsField = {
-    component: 'textArea',
-    name: 'comments',
-    label: 'Comments',
-    disabled: false
-};
-
-const FormCmp = ({classes}) => {
+const FormCmp = ({classes, token}) => {
     const [open, setOpen] = useState(false);
+    const [typeField, setTypeField] = useState({});
+    const [leftFields, setLeftFields] = useState([]);
+    const [rightFields, setRightFields] = useState([]);
+
+    useEffect(() => {
+        const retrieveData = async () => {
+            setTypeField(await getTypeField(token));
+            setRightFields(await getRightFields());
+            setLeftFields(await getLeftFields(token));
+        };
+
+        retrieveData();
+    });
+
     const handleOpenForm = () => setOpen(true);
     const handleCloseForm = () => setOpen(false);
+
     const initialValues = {
         type: '',
-        wilaya: ''
-    };
-
-    const addEntry = values => {
-        console.log(values);
+        resource: '',
+        wilaya: '',
+        commune: '',
+        fullName: '',
+        phone: '',
+        comment: ''
     };
 
     return (
@@ -158,18 +91,31 @@ const FormCmp = ({classes}) => {
                 <Formik
                     initialValues={initialValues}
                     onSubmit={values => {
-                        console.log(values);
-                        addEntry(values);
+                        saveData(values, token).then(() => setOpen(false));
+                    }}
+                    validate={values => {
+                        const errors = {};
+
+                        if (!(values.type &&
+                            values.resource &&
+                            values.wilaya &&
+                            values.commune &&
+                            values.fullName &&
+                            values.phone)) {
+                            errors.missingRequiredFields = true;
+                        }
+
+                        return errors;
                     }}
                 >
-                    {({handleSubmit}) => (
+                    {({handleSubmit, errors, dirty}) => (
                         <>
                             <DialogTitle id="form-dialog-title" className={classes.dialogTitle}>
                                 Formulaire
                             </DialogTitle>
                             <DialogContent>
                                 <Form className={classes.form}>
-                                    <RenderField {...selectTypeField}/>
+                                    <RenderField {...typeField}/>
 
                                     <div className={classes.fieldset}>
                                         <div className={classes.fields}>
@@ -184,7 +130,8 @@ const FormCmp = ({classes}) => {
                                 </Form>
                             </DialogContent>
                             <DialogActions className={classes.dialogActions}>
-                                <Button onClick={handleSubmit} color="primary">
+                                <Button disabled={!dirty || (dirty && errors.missingRequiredFields)}
+                                        onClick={handleSubmit} color="primary">
                                     Envoyer
                                 </Button>
                             </DialogActions>
@@ -197,7 +144,8 @@ const FormCmp = ({classes}) => {
 };
 
 FormCmp.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    token: PropTypes.string.isRequired
 };
 
 export const FormEntry = withStyles(styles)(FormCmp);

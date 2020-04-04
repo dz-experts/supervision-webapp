@@ -35,43 +35,54 @@ const styles = () => ({
 const RenderFieldCmp = ({component, classes, options, name, label, type, disabled}) => {
     return (
         <Field className={classes.field} type={type} name={name}>
-            {({form, field}) => (
-                <>
-                    {component === 'selector' &&
-                    <Selector
-                        classes={{selectorItem: classes.selectorItem}}
-                        id={name}
-                        name={name}
-                        label={label}
-                        items={options}
-                        disabled={disabled}
-                        value={form.values[name]}
-                        handleChange={field.onChange}
-                    />}
+            {({form, field}) => {
+                if (component === 'selector' && name === 'commune') {
+                    options = options.filter(commune => commune.wilaya === form.values.wilaya);
+                }
 
-                    {component === 'input' &&
-                    <TextField
-                        fullWidth
-                        name
-                        type={type}
-                        variant="outlined"
-                        margin="normal"
-                        label={label}
-                        value={form.values[name]}
-                        {...field}
-                    />}
+                const handleChange = e => {
+                    form.setFieldValue('commune', '', true);
+                    form.handleChange(e);
+                };
 
-                    {component === 'textArea' &&
-                    <textarea
-                        name
-                        className={classes.textArea}
-                        placeholder={label}
-                        rows={10}
-                        value={form.values[name]}
-                        {...field}
-                    />}
-                </>
-            )}
+                return (
+                    <>
+                        {component === 'selector' &&
+                        <Selector
+                            classes={{selectorItem: classes.selectorItem}}
+                            id={name}
+                            name={name}
+                            label={label}
+                            items={options}
+                            disabled={disabled || options.length === 0}
+                            value={form.values[name] || ''}
+                            handleChange={name === 'wilaya' ? e => handleChange(e) : field.onChange}
+                        />}
+
+                        {component === 'input' &&
+                        <TextField
+                            fullWidth
+                            name
+                            type={type}
+                            variant="outlined"
+                            margin="normal"
+                            label={label}
+                            value={form.values[name]}
+                            {...field}
+                        />}
+
+                        {component === 'textArea' &&
+                        <textarea
+                            name
+                            className={classes.textArea}
+                            placeholder={label}
+                            rows={10}
+                            value={form.values[name]}
+                            {...field}
+                        />}
+                    </>
+                );
+            }}
         </Field>
     );
 };

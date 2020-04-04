@@ -12,6 +12,7 @@ import {Widget} from './Widget';
 import {FormEntry} from './Form';
 import {Logout} from './Logout';
 import {Maps} from './Maps';
+import {useSupervisionContext} from '../Supervision.context';
 
 const styles = () => ({
     container: {
@@ -41,28 +42,32 @@ const styles = () => ({
     }
 });
 
-export const HomeCmp = ({classes}) => (
-    <Container className={classes.container} component="main" maxWidth="xs">
-        <Maps/>
+export const HomeCmp = ({classes}) => {
+    const {token} = useSupervisionContext();
 
-        <div className={classes.topContainer}>
-            <Widget/>
+    return (
+        <Container className={classes.container} component="main" maxWidth="xs">
+            <Maps/>
 
-            <div>
-                <Selectors/>
-                <Logout/>
+            <div className={classes.topContainer}>
+                <Widget/>
+
+                <div>
+                    <Selectors/>
+                    <Logout/>
+                </div>
             </div>
-        </div>
 
-        <div className={classes.bottomContainer}>
-            <IconButton classes={{root: classes.iconButton}} color="primary">
-                <Menu/>
-            </IconButton>
+            <div className={classes.bottomContainer}>
+                <IconButton classes={{root: classes.iconButton}} color="primary">
+                    <Menu/>
+                </IconButton>
 
-            <FormEntry/>
-        </div>
-    </Container>
-);
+                <FormEntry token={token}/>
+            </div>
+        </Container>
+    );
+};
 
 HomeCmp.propTypes = {
     classes: PropTypes.object.isRequired

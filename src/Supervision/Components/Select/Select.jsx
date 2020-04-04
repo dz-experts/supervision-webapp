@@ -28,7 +28,7 @@ const SelectorCmp = ({classes, id, name, label, value, handleChange, items, ...p
         >
             {
                 items.map(item => (
-                    <MenuItem key={item.id} value={item.value}>{item.displayValue}</MenuItem>
+                    <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
                 ))
             }
         </Select>
@@ -48,9 +48,8 @@ SelectorCmp.propTypes = {
     handleChange: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(
         PropTypes.shape({
-            id: PropTypes.string,
-            value: PropTypes.string,
-            displayValue: PropTypes.string
+            id: PropTypes.number,
+            name: PropTypes.number
         })
     ).isRequired
 };
