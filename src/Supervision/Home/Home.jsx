@@ -9,7 +9,7 @@ import {Menu} from '@material-ui/icons';
 import Background from '../../asserts/images/covid-map.jpg';
 import {Selectors} from './Selectors';
 import {Widget} from './Widget';
-import {Form} from './Form';
+import {FormEntry} from './Form';
 import {Logout} from './Logout';
 import {Maps} from './Maps';
 
@@ -59,7 +59,7 @@ export const HomeCmp = ({classes}) => (
                 <Menu/>
             </IconButton>
 
-            <Form/>
+            <FormEntry/>
         </div>
     </Container>
 );

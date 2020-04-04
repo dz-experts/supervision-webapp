@@ -91,6 +91,7 @@ const LoginCmp = ({classes}) => {
                                         fullWidth
                                         label="Password"
                                         id="password"
+                                        type="password"
                                         autoComplete="current-password"
                                         {...field}
                                     />
