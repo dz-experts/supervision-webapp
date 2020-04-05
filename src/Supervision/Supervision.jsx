@@ -11,13 +11,19 @@ import {SupervisionContext} from './Supervision.context';
 
 export const Supervision = () => {
     const [token, setToken] = useState(localStorage.getItem('token'));
+    const [data, setData] = useState({loading: true});
+    const [mapsConfigs, setMapsConfigs] = useState({});
 
     const contextValue = {
         token: token,
-        setToken: data => {
-            localStorage.setItem('token', data);
-            setToken(data);
-        }
+        setToken: newData => {
+            localStorage.setItem('token', newData);
+            setToken(newData);
+        },
+        data: data,
+        setData: newData => setData(newData),
+        mapsConfigs: mapsConfigs,
+        setMapsConfigs: newMapsConfigs => setMapsConfigs(newMapsConfigs)
     };
 
     return (

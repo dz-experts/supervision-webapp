@@ -1,43 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Selector} from '../../Components';
-
-const selectors = [
-    {
-        id: '1',
-        label: 'Wilaya',
-        value: 'wilaya',
-        handleChange: () => {
-        },
-        items: [
-            {id: '11', value: 'wilaya', displayValue: 'Wilaya'}
-        ]
-    },
-    {
-        id: '2',
-        label: 'Commune',
-        value: 'commune',
-        handleChange: () => {
-        },
-        items: [
-            {id: '21', value: 'commune', displayValue: 'Commune'}
-        ]
-    },
-    {
-        id: '3',
-        label: 'Ressource',
-        value: 'ressource',
-        handleChange: () => {
-        },
-        items: [
-            {id: '31', value: 'ressource', displayValue: 'Ressource'}
-        ]
-    }
-];
+import {useSupervisionContext} from '../../Supervision.context';
+import {Form, Formik} from 'formik';
+import {RenderField} from '../Form/RenderField';
 
 const Selectors = () => {
+    const {data: {wilayas, communes, resources}, setMapsConfigs} = useSupervisionContext();
+    const selectors = [wilayas, communes, resources];
+    const initialValues = {
+        wilaya: '',
+        commune: '',
+        resource: ''
+    };
+
     return (
-        selectors.map(selector => <Selector key={selector.id} {...selector}/>)
+        <Formik
+            initialValues={initialValues}
+            validate={values => {
+                if (values.commune) {
+                    const {latitude, longitude} = communes.options.find(commune => commune.id === values.commune);
+
+                    setMapsConfigs({
+                        center: {
+                            lat: latitude,
+                            lng: longitude
+                        },
+                        zoom: 8
+                    });
+                }
+            }}
+        >
+            {() => {
+                return (
+                    <Form>
+                        {selectors.map(selector => <RenderField key={selector.id} {...selector}/>)}
+                    </Form>
+                );
+            }}
+        </Formik>
     );
 };
 

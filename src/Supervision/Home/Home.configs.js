@@ -1,21 +1,4 @@
-import api from '../../Api';
-
-const retrieveData = async (type, location, token) => {
-    const isPublicData = location === 'public';
-    const url = `api/${location}/${type}/`;
-
-    const response = await api.get(url, !isPublicData && {
-        headers: {
-            Authorization: `Token ${token}`
-        }
-    });
-
-    if (response.status === 200) {
-        return response.data;
-    }
-
-    return [];
-};
+import {retrieveData} from './Home.request';
 
 const getTypeField = async token => ({
     component: 'selector',
@@ -53,9 +36,9 @@ const getCommunesField = async () => ({
     disabled: false
 });
 
-const getLeftFields = async token => ([
-    await getWilayaField(),
-    await getResourceField(token),
+const getLeftFields = ({wilayas, resources}) => ([
+    wilayas,
+    resources,
     {
         component: 'input',
         name: 'fullName',
@@ -65,8 +48,8 @@ const getLeftFields = async token => ([
     }
 ]);
 
-const getRightFields = async () => ([
-    await getCommunesField(),
+const getRightFields = ({communes}) => ([
+    communes,
     {
         component: 'input',
         name: 'quantity',
@@ -92,6 +75,9 @@ const commentsField = {
 
 export {
     getTypeField,
+    getResourceField,
+    getWilayaField,
+    getCommunesField,
     getLeftFields,
     getRightFields,
     commentsField

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {
     IconButton,
@@ -15,12 +15,12 @@ import {Add} from '@material-ui/icons';
 import {Formik, Form} from 'formik';
 import {RenderField} from './RenderField';
 import {
-    getTypeField,
     getLeftFields,
     getRightFields,
     commentsField
 } from '../Home.configs';
 import {saveData} from './FormEntry.request';
+import {useSupervisionContext} from '../../Supervision.context';
 
 const styles = () => ({
     iconButton: {
@@ -52,21 +52,13 @@ const styles = () => ({
     }
 });
 
-const FormCmp = ({classes, token}) => {
+const FormCmp = ({classes}) => {
+    const {token, data} = useSupervisionContext();
     const [open, setOpen] = useState(false);
-    const [typeField, setTypeField] = useState({});
-    const [leftFields, setLeftFields] = useState([]);
-    const [rightFields, setRightFields] = useState([]);
 
-    useEffect(() => {
-        const retrieveData = async () => {
-            setTypeField(await getTypeField(token));
-            setRightFields(await getRightFields());
-            setLeftFields(await getLeftFields(token));
-        };
-
-        retrieveData();
-    });
+    const typeField = data.types;
+    const rightFields = getRightFields(data);
+    const leftFields = getLeftFields(data);
 
     const handleOpenForm = () => setOpen(true);
     const handleCloseForm = () => setOpen(false);
@@ -144,8 +136,7 @@ const FormCmp = ({classes, token}) => {
 };
 
 FormCmp.propTypes = {
-    classes: PropTypes.object.isRequired,
-    token: PropTypes.string.isRequired
+    classes: PropTypes.object.isRequired
 };
 
 export const FormEntry = withStyles(styles)(FormCmp);

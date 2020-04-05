@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {
     withStyles,
     Container,
-    IconButton
+    IconButton,
+    CircularProgress
 } from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
 import Background from '../../asserts/images/covid-map.jpg';
@@ -13,6 +14,12 @@ import {FormEntry} from './Form';
 import {Logout} from './Logout';
 import {Maps} from './Maps';
 import {useSupervisionContext} from '../Supervision.context';
+import {
+    getCommunesField,
+    getResourceField,
+    getTypeField,
+    getWilayaField
+} from './Home.configs';
 
 const styles = () => ({
     container: {
@@ -43,7 +50,25 @@ const styles = () => ({
 });
 
 export const HomeCmp = ({classes}) => {
-    const {token} = useSupervisionContext();
+    const {token, data, setData} = useSupervisionContext();
+
+    useEffect(() => {
+        const retrieveData = async () => {
+            setData({
+                loading: false,
+                types: await getTypeField(token),
+                resources: await getResourceField(token),
+                wilayas: await getWilayaField(),
+                communes: await getCommunesField()
+            });
+        };
+
+        retrieveData();
+    }, token);
+
+    if (data.loading) {
+        return <CircularProgress/>;
+    }
 
     return (
         <Container className={classes.container} component="main" maxWidth="xs">
