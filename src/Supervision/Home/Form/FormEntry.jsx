@@ -49,6 +49,11 @@ const styles = () => ({
     dialogActions: {
         borderTop: '1px solid #e0e6ea',
         marginTop: '16px'
+    },
+    selectorItem: {
+        display: 'flex',
+        minWidth: '200px',
+        margin: '16px 0 8px 0'
     }
 });
 
@@ -107,18 +112,34 @@ const FormCmp = ({classes}) => {
                             </DialogTitle>
                             <DialogContent>
                                 <Form className={classes.form}>
-                                    <RenderField {...typeField}/>
+                                    <RenderField
+                                        classes={{selectorItem: classes.selectorItem}}
+                                        {...typeField}
+                                    />
 
                                     <div className={classes.fieldset}>
                                         <div className={classes.fields}>
-                                            {leftFields.map(field => <RenderField key={field.name} {...field}/>)}
+                                            {leftFields.map(field => <RenderField
+                                                    classes={{selectorItem: classes.selectorItem}}
+                                                    key={field.name}
+                                                    {...field}
+                                                />
+                                            )}
                                         </div>
                                         <div className={classes.fields}>
-                                            {rightFields.map(field => <RenderField key={field.name} {...field}/>)}
+                                            {rightFields.map(field => <RenderField
+                                                    classes={{selectorItem: classes.selectorItem}}
+                                                    key={field.name}
+                                                    {...field}
+                                                />
+                                            )}
                                         </div>
                                     </div>
 
-                                    <RenderField {...commentsField}/>
+                                    <RenderField
+                                        classes={{selectorItem: classes.selectorItem}}
+                                        {...commentsField}
+                                    />
                                 </Form>
                             </DialogContent>
                             <DialogActions className={classes.dialogActions}>

@@ -3,8 +3,15 @@ import PropTypes from 'prop-types';
 import {useSupervisionContext} from '../../Supervision.context';
 import {Form, Formik} from 'formik';
 import {RenderField} from '../Form/RenderField';
+import {withStyles} from '@material-ui/core';
 
-const Selectors = () => {
+const styles = () => ({
+    form: {
+        display: 'flex'
+    }
+});
+
+const SelectorsCmp = ({classes}) => {
     const {data: {wilayas, communes, resources}, setMapsConfigs} = useSupervisionContext();
     const selectors = [wilayas, communes, resources];
     const initialValues = {
@@ -32,8 +39,13 @@ const Selectors = () => {
         >
             {() => {
                 return (
-                    <Form>
-                        {selectors.map(selector => <RenderField key={selector.id} {...selector}/>)}
+                    <Form className={classes.form}>
+                        {selectors.map(selector => (
+                            <RenderField
+                                key={selector.id}
+                                {...selector}
+                            />
+                        ))}
                     </Form>
                 );
             }}
@@ -41,8 +53,8 @@ const Selectors = () => {
     );
 };
 
-Selectors.propTypes = {
+SelectorsCmp.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-export {Selectors};
+export const Selectors = withStyles(styles)(SelectorsCmp);

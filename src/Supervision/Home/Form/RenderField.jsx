@@ -8,11 +8,6 @@ import {Field} from 'formik';
 import {Selector} from '../../Components';
 
 const styles = () => ({
-    selectorItem: {
-        display: 'flex',
-        minWidth: '200px',
-        margin: '16px 0 8px 0'
-    },
     textArea: {
         resize: 'none',
         width: '500px',

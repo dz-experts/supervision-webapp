@@ -46,6 +46,10 @@ const styles = () => ({
         '&:hover': {
             background: '#fff'
         }
+    },
+    topRightContainer: {
+        display: 'flex',
+        alignItems: 'flex-start'
     }
 });
 
@@ -77,7 +81,7 @@ export const HomeCmp = ({classes}) => {
             <div className={classes.topContainer}>
                 <Widget/>
 
-                <div>
+                <div className={classes.topRightContainer}>
                     <Selectors/>
                     <Logout/>
                 </div>
