@@ -43,8 +43,8 @@ const LoginCmp = ({classes}) => {
         console.log(username, password);
 
         const response = await api.post('api/auth/login/', {
-            username: 'admin@mofeed.dz',
-            password: 'axdvfcsz'
+            username: username,
+            password: password
         });
 
         if (response.status === 200) {

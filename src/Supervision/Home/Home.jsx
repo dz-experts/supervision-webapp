@@ -50,6 +50,14 @@ const styles = () => ({
     topRightContainer: {
         display: 'flex',
         alignItems: 'flex-start'
+    },
+    loading: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        maxWidth: '100%',
+        background: '#9e9ea2bf'
     }
 });
 
@@ -71,7 +79,11 @@ export const HomeCmp = ({classes}) => {
     }, token);
 
     if (data.loading) {
-        return <CircularProgress/>;
+        return (
+            <div className={classes.loading}>
+                <CircularProgress/>
+            </div>
+        );
     }
 
     return (
