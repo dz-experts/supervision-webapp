@@ -2,6 +2,7 @@
   "name": "supervision-webapp",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://dz-experts.github.io/supervision-webapp/",
   "dependencies": {
     "@material-ui/core": "^4.9.7",
     "@material-ui/icons": "^4.9.1",
@@ -17,6 +18,8 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -40,6 +43,7 @@
   },
   "devDependencies": {
     "eslint": "^6.8.0",
-    "eslint-config-xo": "^0.29.1"
+    "eslint-config-xo": "^0.29.1",
+    "gh-pages": "^2.2.0"
   }
 }
