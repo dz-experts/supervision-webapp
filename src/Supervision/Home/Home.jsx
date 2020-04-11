@@ -104,7 +104,7 @@ export const HomeCmp = ({classes}) => {
                     <Menu/>
                 </IconButton>
 
-                <FormEntry token={token}/>
+                <FormEntry/>
             </div>
         </Container>
     );

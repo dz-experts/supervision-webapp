@@ -8,16 +8,19 @@ import {withStyles} from '@material-ui/core';
 const styles = () => ({
     form: {
         display: 'flex'
+    },
+    selectorItem: {
+        background: '#fff',
+        borderRadius: '4px'
     }
 });
 
 const SelectorsCmp = ({classes}) => {
-    const {data: {wilayas, communes, resources}, setMapsConfigs} = useSupervisionContext();
-    const selectors = [wilayas, communes, resources];
+    const {data: {wilayas, communes}, setMapsConfigs} = useSupervisionContext();
+    const selectors = [wilayas, communes];
     const initialValues = {
         wilaya: '',
-        commune: '',
-        resource: ''
+        commune: ''
     };
 
     return (
@@ -42,6 +45,7 @@ const SelectorsCmp = ({classes}) => {
                     <Form className={classes.form}>
                         {selectors.map(selector => (
                             <RenderField
+                                classes={{selectorItem: classes.selectorItem}}
                                 key={selector.id}
                                 {...selector}
                             />

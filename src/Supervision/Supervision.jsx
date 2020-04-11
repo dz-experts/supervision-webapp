@@ -13,6 +13,7 @@ export const Supervision = () => {
     const [token, setToken] = useState(localStorage.getItem('token'));
     const [data, setData] = useState({loading: true});
     const [mapsConfigs, setMapsConfigs] = useState({});
+    const [entries, setEntries] = useState([]);
 
     const contextValue = {
         token: token,
@@ -22,6 +23,8 @@ export const Supervision = () => {
         },
         data: data,
         setData: newData => setData(newData),
+        entries: entries,
+        setEntries: newEntries => setEntries(newEntries),
         mapsConfigs: mapsConfigs,
         setMapsConfigs: newMapsConfigs => setMapsConfigs(newMapsConfigs)
     };

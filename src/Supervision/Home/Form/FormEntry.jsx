@@ -21,6 +21,7 @@ import {
 } from '../Home.configs';
 import {saveData} from './FormEntry.request';
 import {useSupervisionContext} from '../../Supervision.context';
+import {retrieveEntries} from '../Maps/Maps.request';
 
 const styles = () => ({
     iconButton: {
@@ -58,7 +59,7 @@ const styles = () => ({
 });
 
 const FormCmp = ({classes}) => {
-    const {token, data} = useSupervisionContext();
+    const {token, data, setEntries} = useSupervisionContext();
     const [open, setOpen] = useState(false);
 
     const typeField = data.types;
@@ -88,7 +89,10 @@ const FormCmp = ({classes}) => {
                 <Formik
                     initialValues={initialValues}
                     onSubmit={values => {
-                        saveData(values, token).then(() => setOpen(false));
+                        saveData(values, token).then(async () => {
+                            setEntries(await retrieveEntries(token));
+                            setOpen(false);
+                        });
                     }}
                     validate={values => {
                         const errors = {};

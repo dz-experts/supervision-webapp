@@ -1,18 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {
     withStyles
 } from '@material-ui/core';
 import GoogleMapReact from 'google-map-react';
 import {googleMapsConfigs} from './Maps.configs';
-import {
-    Home,
-    Print
-} from '@material-ui/icons';
-import {ReactComponent as Mask} from '../../../asserts/icons/mask.svg';
-import {ReactComponent as Ventilator} from '../../../asserts/icons/ventilator.svg';
 import {useSupervisionContext} from '../../Supervision.context';
 import {retrieveEntries} from './Maps.request';
+import {Marker} from './Marker';
 
 const styles = () => ({
     googleMaps: {
@@ -25,74 +20,20 @@ const styles = () => ({
 
 const adapter = entries => {
     const result = [];
-    let color = '';
-    let icon = '';
-    let lat = '';
-    let lng = '';
 
     entries.forEach(entry => {
-        if (entry.type.id === 1) {
-            color = 'blue';
-        }
+        const lat = entry.commune.latitude;
+        const lng = entry.commune.longitude;
 
-        if (entry.type.id === 2) {
-            color = 'green';
-        }
-
-        if (entry.type.id === 3) {
-            color = 'orange';
-        }
-
-        if (entry.type.id === 4) {
-            color = 'red';
-        }
-
-        if (entry.resource.id === 1) {
-            icon = 'Print';
-        }
-
-        if (entry.resource.id === 2) {
-            icon = 'Mask';
-        }
-
-        if (entry.resource.id === 3) {
-            icon = 'Home';
-        }
-
-        if (entry.resource.id === 4) {
-            icon = 'Ventilator';
-        }
-
-        lat = entry.commune.latitude;
-        lng = entry.commune.longitude;
-
-        let e;
-        if (icon === 'Print') {
-            e = <Print lat={lat} lng={lng} style={{fill: color}}/>;
-        }
-
-        if (icon === 'Mask') {
-            e = <Mask lat={lat} lng={lng} style={{fill: color}}/>;
-        }
-
-        if (icon === 'Home') {
-            e = <Home lat={lat} lng={lng} style={{fill: color}}/>;
-        }
-
-        if (icon === 'Ventilator') {
-            e = <Ventilator lat={lat} lng={lng} style={{fill: color}}/>;
-        }
-
-        result.push(e);
+        result.push(<Marker lat={lat} lng={lng} entry={entry}/>);
     });
 
     return result;
 };
 
 const MapsCmp = ({classes}) => {
-    const {mapsConfigs: {center, zoom}, token} = useSupervisionContext();
+    const {mapsConfigs: {center, zoom}, token, entries, setEntries} = useSupervisionContext();
     const {defaultCenter, defaultZoom, defaultOptions, key} = googleMapsConfigs;
-    const [entries, setEntries] = useState([]);
 
     useEffect(() => {
         const retrieveData = async () => {
