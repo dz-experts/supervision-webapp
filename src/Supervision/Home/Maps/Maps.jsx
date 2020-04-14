@@ -1,8 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {
-    withStyles
-} from '@material-ui/core';
+import {withStyles} from '@material-ui/core';
 import GoogleMapReact from 'google-map-react';
 import {googleMapsConfigs} from './Maps.configs';
 import {useSupervisionContext} from '../../Supervision.context';
@@ -34,6 +32,7 @@ const adapter = entries => {
 const MapsCmp = ({classes}) => {
     const {mapsConfigs: {center, zoom}, token, entries, setEntries} = useSupervisionContext();
     const {defaultCenter, defaultZoom, defaultOptions, key} = googleMapsConfigs;
+    const [currentZoom, updateZoom] = useState(zoom);
 
     useEffect(() => {
         const retrieveData = async () => {
@@ -48,10 +47,19 @@ const MapsCmp = ({classes}) => {
             <GoogleMapReact
                 bootstrapURLKeys={key}
                 center={center}
-                zoom={zoom}
+                zoom={currentZoom}
                 defaultCenter={defaultCenter}
                 defaultZoom={defaultZoom}
                 options={defaultOptions}
+                onZoomAnimationStart={zoomAnimation => {
+                    updateZoom(zoomAnimation);
+                }}
+                onChange={() => {
+                    if (window.handleEventUpdateZoom) {
+                        updateZoom(zoom);
+                        window.handleEventUpdateZoom = false;
+                    }
+                }}
                 // TODO: remove workaround for issue: https://github.com/google-map-react/google-map-react/issues/677
                 distanceToMouse={() => {}}
             >

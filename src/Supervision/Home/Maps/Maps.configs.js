@@ -171,6 +171,7 @@ export const googleMapsConfigs = {
         //     }
         // ],
         fullscreenControl: false,
-        zoomControl: false
+        zoomControl: false,
+        minZoom: 3
     }
 };

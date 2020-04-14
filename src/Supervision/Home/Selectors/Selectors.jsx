@@ -35,8 +35,9 @@ const SelectorsCmp = ({classes}) => {
                             lat: latitude,
                             lng: longitude
                         },
-                        zoom: 8
+                        zoom: 13
                     });
+                    window.handleEventUpdateZoom = true;
                 }
             }}
         >
