@@ -1,7 +1,7 @@
 import api from '../../../Api';
 
 export const saveData = (data, token) => {
-    const {type, resource, fullName, phone, wilaya, commune, comment} = data;
+    const {type, resource, fullName, phone, wilaya, commune, comment, quantity} = data;
 
     return api.post('api/resources/entries/',
         {
@@ -11,7 +11,8 @@ export const saveData = (data, token) => {
             phone: phone,
             wilaya: wilaya,
             commune: commune,
-            comment: comment
+            comment: comment,
+            quantity: quantity
         },
         {
             headers: {

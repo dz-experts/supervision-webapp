@@ -76,7 +76,8 @@ const FormCmp = ({classes}) => {
         commune: '',
         fullName: '',
         phone: '',
-        comment: ''
+        comment: '',
+        quantity: ''
     };
 
     return (
@@ -102,6 +103,7 @@ const FormCmp = ({classes}) => {
                             values.wilaya &&
                             values.commune &&
                             values.fullName &&
+                            values.quantity &&
                             values.phone)) {
                             errors.missingRequiredFields = true;
                         }
