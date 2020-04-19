@@ -7,12 +7,14 @@ import {
     CircularProgress
 } from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
+import classnames from 'clsx';
 import Background from '../../asserts/images/covid-map.jpg';
 import {Selectors} from './Selectors';
 import {Widget} from './Widget';
 import {FormEntry} from './Form';
 import {Logout} from './Logout';
 import {Maps} from './Maps';
+import {TableView} from './TableView';
 import {useSupervisionContext} from '../Supervision.context';
 import {
     getCommunesField,
@@ -47,6 +49,9 @@ const styles = () => ({
             background: '#fff'
         }
     },
+    oneIconButton: {
+        justifyContent: 'flex-end'
+    },
     topRightContainer: {
         display: 'flex',
         alignItems: 'flex-start'
@@ -58,11 +63,14 @@ const styles = () => ({
         height: '100vh',
         maxWidth: '100%',
         background: '#9e9ea2bf'
+    },
+    main: {
+        display: 'flex'
     }
 });
 
 export const HomeCmp = ({classes}) => {
-    const {token, data, setData} = useSupervisionContext();
+    const {token, data, setData, twoLayout, setTwoLayout} = useSupervisionContext();
 
     useEffect(() => {
         const retrieveData = async () => {
@@ -87,26 +95,39 @@ export const HomeCmp = ({classes}) => {
     }
 
     return (
-        <Container className={classes.container} component="main" maxWidth="xs">
-            <Maps/>
+        <div className={classes.main}>
+            {
+                twoLayout &&
+                <TableView/>
+            }
+            <Container className={classes.container} component="main" maxWidth="xs">
+                <Maps/>
 
-            <div className={classes.topContainer}>
-                <Widget/>
+                <div className={classes.topContainer}>
+                    <Widget/>
 
-                <div className={classes.topRightContainer}>
-                    <Selectors/>
-                    <Logout/>
+                    <div className={classes.topRightContainer}>
+                        <Selectors/>
+                        <Logout/>
+                    </div>
                 </div>
-            </div>
 
-            <div className={classes.bottomContainer}>
-                <IconButton classes={{root: classes.iconButton}} color="primary">
-                    <Menu/>
-                </IconButton>
+                <div className={classnames(
+                    classes.bottomContainer,
+                    {[classes.oneIconButton]: twoLayout}
+                )}>
+                    {!twoLayout &&
+                    <IconButton
+                        classes={{root: classes.iconButton}}
+                        color="primary"
+                        onClick={() => setTwoLayout(true)}>
+                        <Menu/>
+                    </IconButton>}
 
-                <FormEntry/>
-            </div>
-        </Container>
+                    <FormEntry/>
+                </div>
+            </Container>
+        </div>
     );
 };
 

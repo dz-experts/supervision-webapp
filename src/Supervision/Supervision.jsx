@@ -14,6 +14,7 @@ export const Supervision = () => {
     const [data, setData] = useState({loading: true});
     const [mapsConfigs, setMapsConfigs] = useState({});
     const [entries, setEntries] = useState([]);
+    const [twoLayout, setTwoLayout] = useState(false);
 
     const contextValue = {
         token: token,
@@ -26,7 +27,9 @@ export const Supervision = () => {
         entries: entries,
         setEntries: newEntries => setEntries(newEntries),
         mapsConfigs: mapsConfigs,
-        setMapsConfigs: newMapsConfigs => setMapsConfigs(newMapsConfigs)
+        setMapsConfigs: newMapsConfigs => setMapsConfigs(newMapsConfigs),
+        twoLayout: twoLayout,
+        setTwoLayout: value => setTwoLayout(value)
     };
 
     return (
